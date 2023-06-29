@@ -18,14 +18,23 @@ class MyGUI(QMainWindow):
             if button.text() != "=":
                 button.clicked.connect(lambda checked, btn=button: self.input(btn.text()))
             else:
-                self.Btn_sum
+                self.Btn_sum.clicked.connect(self.total)
 
 
 
     # outputs a message box containing a users input
     def input(self, num):
+        
+        # NEED TO DISPLAY MUTITPLE OPERATOR INPUT
         self.currentNum = self.currentNum + num
-        print(self.currentNum)
+
+    def total(self):
+        test = self.currentNum
+        res = eval(test)
+        print(res)
+
+
+
  
 
 # main application
