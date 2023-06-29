@@ -10,35 +10,38 @@ class MyGUI(QMainWindow):
         uic.loadUi("gui.ui", self)
         self.show()
 
+        # stores current expression
         self.currentExp = ""
 
+        # stores list of all buttons on the UI
         button_List = self.findChildren(QPushButton)
-        self.num_Buttons = []
-        self.operator_Buttons = []
 
+        # loops through buttons
         for button in button_List:
+
+            # check the type of button
             if button.text() == "=":
+                # sets up = button
                 button.clicked.connect(self.total)
-                self.operator_Buttons.append(button)
+
             elif button.text() == "C":
+                # sets up clear button
                 button.clicked.connect(self.clear)
+            
+            elif button.text() == "Back":
+                # Removes last input
+                button.clicked.connect(self.back)                
+
             else:
+                # sets up operators and number buttons
                 button.clicked.connect(lambda checked, btn=button: self.input(btn.text()))
-
-                if button.text().isdigit():
-                    self.num_Buttons.append(button)
-                else:
-                    self.operator_Buttons.append(button)                
-
-
+              
     # outputs a message box containing a users input
     def input(self, userInput):
-        
+
+        self.Btn_Back.setEnabled(True)
         if len(self.currentExp) > 0:
 
-            # prevents division by zero
-            if self.currentExp[-1] != "/":
-                self.Btn_0.setEnabled(True)
 
             # Prevents user from inputting two operators consecutively
             if not (self.currentExp[-1].isdigit() or userInput.isdigit()):
@@ -51,6 +54,8 @@ class MyGUI(QMainWindow):
             # prevents division by zero
             if userInput == "/":
                 self.Btn_0.setEnabled(False)
+            else:
+                self.Btn_0.setEnabled(True)
 
         # checks if first input is an operator        
         elif userInput.isdigit():
@@ -61,15 +66,33 @@ class MyGUI(QMainWindow):
 
     # sums up total
     def total(self):
+        self.Btn_Back.setEnabled(False)
         res = eval(self.currentExp)
         self.outputLbl.setText(self.currentExp + "=" + str(res))
         self.currentExp = str(res)
 
-    # clears 
+    # clears expression
     def clear(self):
+        self.Btn_Back.setEnabled(False)
         self.Btn_0.setEnabled(True)
         self.currentExp = ""
         self.outputLbl.setText("")
+
+    # removes last input
+    def back(self):
+        
+        # checks if an expression exists
+        if len(self.currentExp) > 0:
+
+            # removes last input
+            self.currentExp = self.currentExp[:-1]
+            self.outputLbl.setText(self.currentExp)
+
+            # prevents divison by zero
+            if len(self.currentExp) > 0 and self.currentExp[-1] != "/":
+                self.Btn_0.setEnabled(True)
+            elif len(self.currentExp) > 0 and self.currentExp[-1] == "/":
+                self.Btn_0.setEnabled(False)
 
 
 
