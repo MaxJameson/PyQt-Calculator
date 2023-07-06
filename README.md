@@ -4,4 +4,3 @@ Future features:
 - floating point sums
 - calculation history
 - bracket support
-- exponentiation (power) operations
