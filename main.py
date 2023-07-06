@@ -13,6 +13,9 @@ class MyGUI(QMainWindow):
         # stores current expression
         self.currentExp = ""
 
+        # stores the last input operator
+        self.previousOp = ""
+
         # stores list of all buttons on the UI
         button_List = self.findChildren(QPushButton)
 
@@ -49,10 +52,18 @@ class MyGUI(QMainWindow):
             # Prevents user from inputting two operators consecutively
             if not (self.currentExp[-1].isdigit() or userInput.isdigit()):
                 return
+            # prevent multiple decimal points from being added to the same number
+            elif (self.previousOp == "." and userInput == "."):
+                return
 
             # adds current input to expression
             self.currentExp += userInput
             self.outputLbl.setText(self.currentExp)
+
+            # checks if the current input is an operator and stores is
+            if not(userInput.isdigit()):
+                self.previousOp = userInput
+            
 
             # prevents division by zero
             if userInput == "/":
@@ -66,6 +77,7 @@ class MyGUI(QMainWindow):
             # adds input tp expression
             self.currentExp += userInput
             self.outputLbl.setText(self.currentExp)
+            self.previousOp = userInput
 
     # sums up total
     def total(self):
@@ -103,6 +115,8 @@ class MyGUI(QMainWindow):
 
 # main application
 def main():
+
+    
     # intinalises window
     app = QApplication([])
     window = MyGUI()
