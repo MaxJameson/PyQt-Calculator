@@ -20,21 +20,24 @@ class MyGUI(QMainWindow):
         for button in button_List:
 
             # check the type of button
-            if button.text() == "=":
-                # sets up = button
-                button.clicked.connect(self.total)
+            match button.text():
 
-            elif button.text() == "C":
-                # sets up clear button
-                button.clicked.connect(self.clear)
-            
-            elif button.text() == "Back":
-                # Removes last input
-                button.clicked.connect(self.back)                
+                case "=":
+                    # sets up = button
+                    button.clicked.connect(self.total)
 
-            else:
-                # sets up operators and number buttons
-                button.clicked.connect(lambda checked, btn=button: self.input(btn.text()))
+                case "C":
+                    # sets up clear button
+                    button.clicked.connect(self.clear)
+
+                case "Back":
+                    # Removes last input
+                    button.clicked.connect(self.back)
+
+                case _:
+                    # sets up operators and number buttons
+                    button.clicked.connect(lambda checked, btn=button: self.input(btn.text()))
+
               
     # outputs a message box containing a users input
     def input(self, userInput):
